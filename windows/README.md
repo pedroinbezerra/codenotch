@@ -301,7 +301,9 @@ Hook retries share a two-second network deadline, and an automatic launch does n
 
 Settings opens within the monitor's work area in logical pixels, can be resized, and scrolls its
 content independently of the header. Controls wrap when translated text or a smaller viewport needs
-more room. The browser regression test uses synthetic account data at 100%, 125%, 150% and 200%
+more room. Account and taskbar controls use the Settings translation catalog and update immediately
+when the language changes, including status messages and accessible labels. English remains the fallback
+for untranslated strings. The browser regression test uses synthetic account data at 100%, 125%, 150% and 200%
 display scales, including Portuguese and narrow windows:
 
 ```powershell

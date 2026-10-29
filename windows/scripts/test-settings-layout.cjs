@@ -14,6 +14,8 @@ test('Settings keeps translated controls reachable at Windows display scales and
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.addInitScript(() => {
+        // Language changes must redraw immediately, independently of the background poll.
+        window.setInterval = () => 0;
         window.__TAURI__ = {
           core: { invoke: async cmd => ({
             get_lang: 'pt-BR', get_lang_resolved: 'pt-BR', get_theme_resolved: 'light',
@@ -22,6 +24,7 @@ test('Settings keeps translated controls reachable at Windows display scales and
               { id: 'default', name: 'Personal account with a long display name', path: 'C:\\Users\\Example\\.claude', enabled: true, connected: true },
               { id: 'work', name: 'Work', path: 'C:\\Users\\Example\\.claude-work-with-a-long-profile-folder', enabled: true, connected: false },
             ],
+            get_claude_auth: { message: 'Sign-in complete' },
             get_tray_options: [], get_notch_slots: [], get_glyphs: {},
             get_taskbar_options: { mode: 'off', width: 280 },
             get_update_state: { current_version: '1.24.0', checking: false },
@@ -32,6 +35,33 @@ test('Settings keeps translated controls reachable at Windows display scales and
       });
       await page.goto(pathToFileURL(path.join(__dirname, '../codenotch/ui/settings.html')).href);
       await page.waitForFunction(() => !document.documentElement.classList.contains('booting'));
+      await page.waitForFunction(() => document.querySelectorAll('.profile-row').length === 2);
+      await page.locator('#tab-appearance').click();
+      for (const language of ['en', 'pt-BR', 'en', 'pt-BR', 'en']) {
+        await page.locator('#lang').selectOption(language);
+        await page.waitForFunction(lang => document.documentElement.lang === lang, language);
+        const copy = await page.evaluate(() => ({
+          title: document.getElementById('claude-profiles-title').textContent,
+          add: document.getElementById('claude-add-button').textContent,
+          name: document.getElementById('claude-name-label').textContent,
+          placeholder: document.getElementById('claude-account-name').placeholder,
+          taskbar: document.getElementById('taskbar-title').textContent,
+          display: document.getElementById('taskbar-position-label').textContent,
+          save: document.querySelector('[data-save]').textContent,
+          state: document.querySelector('.profile-state').textContent,
+          message: document.getElementById('claude-profile-message').textContent,
+          accountLabel: document.querySelector('.profile-name').getAttribute('aria-label'),
+        }));
+        assert.deepEqual(copy, language === 'pt-BR' ? {
+          title: 'Contas Claude', add: 'Adicionar conta', name: 'Nome da nova conta', placeholder: 'Ex.: Trabalho',
+          taskbar: 'Barra de tarefas', display: 'Exibição', save: 'Salvar nome', state: 'Aguardando a primeira leitura',
+          message: 'Login concluído. Aguardando a leitura de uso…', accountLabel: 'Nome da conta',
+        } : {
+          title: 'Claude accounts', add: 'Add account', name: 'New account name', placeholder: 'Example: Work',
+          taskbar: 'Taskbar', display: 'Display', save: 'Save name', state: 'Waiting for the first reading',
+          message: 'Sign-in complete. Waiting for the usage reading…', accountLabel: 'Account name',
+        }, `switching to ${language} immediately updates static and dynamic copy without retaining the previous language`);
+      }
       for (const viewport of [{ width: 680, height: 520 }, { width: 560, height: 400 }, { width: 960, height: 640 }, { width: 560, height: 328 }]) {
         await page.setViewportSize(viewport);
         for (const language of ['en', 'pt-BR', 'ru', 'es', 'ko']) {

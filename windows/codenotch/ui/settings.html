@@ -150,7 +150,7 @@
       <section class="pane" id="pane-accounts" role="tabpanel" aria-labelledby="tab-accounts" hidden>
         <div class="sec" id="claude-profiles-title" data-dynamic>Claude accounts</div>
         <div class="group" id="claude-profiles" data-dynamic></div>
-        <form class="group profile-add" id="claude-add-form">
+        <form class="group profile-add" id="claude-add-form" data-dynamic>
           <label for="claude-account-name" id="claude-name-label">New account name</label>
           <div class="profile-add-line"><input id="claude-account-name" maxlength="40" required autocomplete="off" placeholder="Example: Work"><button class="btn" id="claude-add-button" type="submit">Add account</button></div>
           <p id="claude-login-help">Each account uses the official Claude CLI sign-in in a separate folder.</p>
@@ -167,8 +167,8 @@
       <section class="pane" id="pane-appearance" role="tabpanel" aria-labelledby="tab-appearance" hidden>
         <div class="sec" id="taskbar-title" data-dynamic>Taskbar</div>
         <div class="group">
-          <div class="item"><label id="taskbar-position-label" for="taskbar-position">Display</label><select id="taskbar-position"><option value="off">Original notch</option><option value="left">Left side</option><option value="right">Before system tray</option></select></div>
-          <div class="item slider"><label id="taskbar-width-label" for="taskbar-width">Width</label><span class="value" id="taskbar-width-value" data-dynamic>280 px</span><input id="taskbar-width" class="range" type="range" min="144" max="520" step="8"></div>
+          <div class="item" data-dynamic><label id="taskbar-position-label" for="taskbar-position">Display</label><select id="taskbar-position"><option value="off">Original notch</option><option value="left">Left side</option><option value="right">Before system tray</option></select></div>
+          <div class="item slider" data-dynamic><label id="taskbar-width-label" for="taskbar-width">Width</label><span class="value" id="taskbar-width-value" data-dynamic>280 px</span><input id="taskbar-width" class="range" type="range" min="144" max="520" step="8"></div>
           <div class="item cap" id="taskbar-help" data-dynamic>Use free space on the primary taskbar. Hover for account limits; click to refresh that account.</div>
           <div class="item cap" id="taskbar-status" role="status" data-dynamic hidden></div>
         </div>
@@ -407,6 +407,52 @@ const PT_BR_STATIC = {
   'App designed and developed by':'App projetado e desenvolvido por',
   'Saved':'Salvo'
 };
+// Accounts and taskbar controls share the same English keys and language selection.
+Object.assign(PT_BR_STATIC, {
+  "Install the standalone Claude Code CLI to connect an account.": "Instale o Claude Code CLI para conectar uma conta.",
+  "Finish signing in through the browser or terminal window.": "Conclua o login na janela do navegador ou terminal.",
+  "Sign-in complete. Waiting for the usage reading…": "Login concluído. Aguardando a leitura de uso…",
+  "Sign-in cancelled, failed or timed out. Try again.": "Login cancelado, não concluído ou expirado. Tente novamente.",
+  "Monitoring paused": "Monitoramento pausado",
+  "Signing in…": "Conectando…",
+  "Usage checks limited · retry in ": "Consulta limitada · nova tentativa em ",
+  "Waiting for the next automatic usage check": "Aguardando a próxima consulta automática",
+  "Sign in again": "Entrar novamente",
+  "Could not update usage": "Não foi possível atualizar o uso",
+  "Saved reading · waiting for update": "Leitura anterior · aguardando atualização",
+  "Waiting for the first reading": "Aguardando a primeira leitura",
+  "No Claude Code sign-in was found.": "Nenhum login do Claude Code foi encontrado.",
+  "Claude rejected the credential. Sign in again.": "O Claude recusou a credencial. Entre novamente.",
+  "Claude Code sign-in expired. Reconnect this account.": "O login do Claude Code expirou. Reconecte esta conta.",
+  "Account name": "Nome da conta",
+  "Monitor": "Monitorar",
+  "Save name": "Salvar nome",
+  "Connect": "Conectar",
+  "Finish signing in through the browser.": "Conclua o login no navegador.",
+  "Available on Windows.": "Disponível no Windows.",
+  "Claude accounts": "Contas Claude",
+  "New account name": "Nome da nova conta",
+  "Add account": "Adicionar conta",
+  "Example: Work": "Ex.: Trabalho",
+  "Each account uses the official Claude CLI sign-in in a separate folder. Switching monitoring off keeps its login.": "Cada conta usa o login oficial do Claude CLI em uma pasta separada. Pausar o monitoramento mantém o login.",
+  "Taskbar": "Barra de tarefas",
+  "Display": "Exibição",
+  "Width": "Largura",
+  "Original notch": "Formato atual",
+  "Left side": "À esquerda",
+  "Before system tray": "Antes da bandeja",
+  "The panel uses free space on the primary taskbar. Hover for account limits; click to refresh that account. It hides when space is unavailable, the taskbar is hidden, or an app is full screen. The system tray icon stays available.": "A faixa ocupa espaço livre na barra principal. Passe o mouse para ver os limites; clique para atualizar aquela conta. Ela se oculta sem espaço, com a barra oculta ou em tela cheia. O ícone perto do relógio continua disponível.",
+  "No free space on the taskbar. Try the other side or a smaller width.": "Sem espaço livre na barra. Tente o outro lado ou uma largura menor.",
+  "Windows did not expose the taskbar buttons. Use the tray to open Settings.": "Não foi possível identificar os botões da barra. Abra as configurações pelo ícone perto do relógio.",
+  "Waiting for the Windows taskbar": "Aguardando a barra de tarefas do Windows",
+  "Waiting for the taskbar child window": "Preparando a exibição na barra de tarefas",
+  "Windows taskbar accessibility is unavailable": "Não foi possível acessar a barra de tarefas do Windows",
+  "Unable to create the taskbar panel": "Não foi possível abrir a faixa na barra de tarefas",
+  "Taskbar integration is unavailable because Windows DPI contexts differ. Use the tray to open Settings.": "O Windows não permitiu a exibição na barra devido às configurações de escala. Abra as configurações pelo ícone perto do relógio.",
+  "Windows did not expose the taskbar child window.": "Não foi possível acessar a exibição na barra de tarefas do Windows.",
+  "Unable to create the taskbar child window. Use the tray to open Settings.": "Não foi possível abrir a exibição na barra. Abra as configurações pelo ícone perto do relógio.",
+  "Unable to schedule taskbar child creation.": "Não foi possível iniciar a exibição na barra de tarefas."
+});
 const RU_STATIC = {
   'Colour transition':'Переход цвета',
   'Hard step':'Резкая смена',
@@ -1197,6 +1243,7 @@ function applyStaticUi(){
     node.nodeValue = raw.replace(key, translated || key);
   }
   for(const el of document.querySelectorAll('[aria-label],[title]')){
+    if(el.closest('[data-dynamic]')) continue;
     for(const attr of ['aria-label','title']){
       if(!el.hasAttribute(attr)) continue;
       const marker = '__en_' + attr.replace('-', '_');
@@ -1223,6 +1270,7 @@ function setUiLanguage(lang){
   document.documentElement.lang = uiLang === 'zh' ? 'zh-Hans' : uiLang === 'zh-Hant' ? 'zh-Hant' : uiLang;
   applyStaticUi();
   renderAll();
+  window.dispatchEvent(new Event('settings-language-changed'));
 }
 function setUiLanguageFromRaw(raw){
   if(raw !== 'auto'){ setUiLanguage(raw); return Promise.resolve(); }
